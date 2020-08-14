@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+
 import Container from "@material-ui/core/Container";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
-import "./style.js";
 import TableWorkout from "../../components/TableWorkout";
 import BaseHeader from "../../shared/BaseHeader";
 import {
@@ -20,6 +22,7 @@ import { getVisibleTodos } from "./selectorSort";
 import ModalEdit from "../../components/ModalEdit";
 import Spiner from "../../components/Spiner";
 import { useStyles } from "./style";
+import "./style.scss";
 
 const MainPage = () => {
   const classes = useStyles();
@@ -76,7 +79,7 @@ const MainPage = () => {
     <>
       <BaseHeader />
       <Container>
-        <h1 className={classes.main_heading}>Таблица прошедших тренировок</h1>
+        <h1 className="main_heading">Таблица прошедших тренировок</h1>
         {loader ? (
           <Spiner />
         ) : (
@@ -101,6 +104,21 @@ const MainPage = () => {
         editElement={editElement}
         editCurrentWorkout={editCurrentWorkout}
       />
+      <div className="charts_wrapper">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={{
+            title: {
+              text: "График по Километрам",
+            },
+            series: [
+              {
+                data: workouts.map((workout) => workout.km),
+              },
+            ],
+          }}
+        />
+      </div>
     </>
   );
 };
